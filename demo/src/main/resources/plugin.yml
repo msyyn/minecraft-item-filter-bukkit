@@ -3,6 +3,12 @@ main: com.example.demo.Plugin
 version: 0.0.1
 api-version: 1.15
 commands:
-  selectblocks:
-    description: Open the block selection GUI
-    usage: /selectblocks
+  ignoreblock:
+    description: Ignores the block you are holding, preventing it from being picked up from the ground
+    usage: /ignoreblock
+  ignoreblocks:
+    description: List all the blocks you are currently ignoring
+    usage: /ignoreblocks
+  clearignores:
+    description: Clear all the blocks you are currently ignoring
+    usage: /clearignores
