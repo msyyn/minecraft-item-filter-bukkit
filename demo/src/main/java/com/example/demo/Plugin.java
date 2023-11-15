@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -41,6 +42,24 @@ public class Plugin extends JavaPlugin implements Listener {
     //
   }
 
+  @EventHandler
+  public void onPlayerPickUpItem(EntityPickupItemEvent event) {
+    if (!(event.getEntity() instanceof Player)) {
+      return;
+    }
+
+    Player player = (Player) event.getEntity();
+    PlayerPreferences prefs = playerPreferences.get(player.getUniqueId());
+
+    if (prefs == null) {
+      return;
+    }
+
+    if (prefs.getIgnoredItems().contains(event.getItem().getItemStack().getType())) {
+      event.setCancelled(true);
+    }
+  }
+
   @Override
   public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
     if (cmd.getName().equalsIgnoreCase("ignoreblock")) {
@@ -55,8 +74,8 @@ public class Plugin extends JavaPlugin implements Listener {
       Material itemInHand = inventory.getItemInMainHand().getType();
   
       if (itemInHand == Material.AIR) {
-          sender.sendMessage("You are not holding any item.");
-          return true;
+        sender.sendMessage("You are not holding any item.");
+        return true;
       }
   
       PlayerPreferences prefs = playerPreferences.computeIfAbsent(player.getUniqueId(), k -> new PlayerPreferences());
@@ -67,6 +86,7 @@ public class Plugin extends JavaPlugin implements Listener {
       handLocation.add(player.getEyeLocation().getDirection().multiply(1));
   
       if (ignoredItems.contains(itemInHand)) {
+<<<<<<< Updated upstream
           ignoredItems.remove(itemInHand);
           sender.sendMessage("You will now pick up " + itemInHand.name() + ".");
   
@@ -80,6 +100,13 @@ public class Plugin extends JavaPlugin implements Listener {
   
           // Add particle effect and sound for ignoring an item at the hand location
           player.playSound(handLocation, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f, 1.0f); // Plays a note block bass sound at the hand location
+=======
+        ignoredItems.remove(itemInHand);
+        sender.sendMessage("You will now pick up " + itemInHand.name() + ".");
+      } else {
+        ignoredItems.add(itemInHand);
+        sender.sendMessage("You will no longer pick up " + itemInHand.name() + ".");
+>>>>>>> Stashed changes
       }
   
       return true;
@@ -89,8 +116,8 @@ public class Plugin extends JavaPlugin implements Listener {
     if (cmd.getName().equalsIgnoreCase("ignoreblocks")) {
       // Ensure the command sender is a player
       if (!(sender instanceof Player)) {
-          sender.sendMessage("This command can only be used by a player.");
-          return true;
+        sender.sendMessage("This command can only be used by a player.");
+        return true;
       }
 
       Player player = (Player) sender;
@@ -98,13 +125,14 @@ public class Plugin extends JavaPlugin implements Listener {
       PlayerPreferences prefs = playerPreferences.get(playerUUID);
 
       if (prefs == null || prefs.getIgnoredItems().isEmpty()) {
-          sender.sendMessage("You have not ignored any blocks. Ignore a block by holding it in your hand and write /ignoreblock");
-          return true;
+        sender.sendMessage(
+            "You have not ignored any blocks. Ignore a block by holding it in your hand and write /ignoreblock");
+        return true;
       }
 
       sender.sendMessage(ChatColor.GOLD + "Ignored Blocks:");
       for (Material ignoredItem : prefs.getIgnoredItems()) {
-          sender.sendMessage(ChatColor.YELLOW + "- " + ignoredItem.name());
+        sender.sendMessage(ChatColor.YELLOW + "- " + ignoredItem.name());
       }
       sender.sendMessage(ChatColor.GOLD + "Clear all with /clearignores");
 
@@ -114,8 +142,8 @@ public class Plugin extends JavaPlugin implements Listener {
     if (cmd.getName().equalsIgnoreCase("clearignores")) {
       // Ensure the command sender is a player
       if (!(sender instanceof Player)) {
-          sender.sendMessage(ChatColor.RED + "This command can only be used by a player.");
-          return true;
+        sender.sendMessage(ChatColor.RED + "This command can only be used by a player.");
+        return true;
       }
 
       Player player = (Player) sender;
@@ -123,8 +151,8 @@ public class Plugin extends JavaPlugin implements Listener {
       PlayerPreferences prefs = playerPreferences.get(playerUUID);
 
       if (prefs == null || prefs.getIgnoredItems().isEmpty()) {
-          sender.sendMessage(ChatColor.YELLOW + "You are not ignoring any blocks.");
-          return true;
+        sender.sendMessage(ChatColor.YELLOW + "You are not ignoring any blocks.");
+        return true;
       }
 
       prefs.getIgnoredItems().clear();
