@@ -25,22 +25,6 @@ public class BlockPickupGUI {
 
   private void addItem(Inventory inv, Material ore, Material smelted, HashSet<Material> selectedOres) {
 
-    /*
-     * if (selectedOres.contains(ore)) {
-     * ItemStack item = new ItemStack(smelted);
-     * ItemMeta meta = item.getItemMeta();
-     * meta.setDisplayName(ChatColor.GREEN + ore.toString());
-     * item.setItemMeta(meta);
-     * } else {
-     * ItemStack item = new ItemStack(ore);
-     * ItemMeta meta = item.getItemMeta();
-     * meta.setDisplayName(ChatColor.GREEN + ore.toString());
-     * item.setItemMeta(meta);
-     * inv.addItem(item);
-     * }
-     * }
-     */
-
     if (selectedOres.contains(ore)) {
       inv.addItem(new ItemStack(smelted));
     } else {
